@@ -1,6 +1,7 @@
 package com.reactiverecruitmenthelper.application;
 
 import lombok.*;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -20,7 +21,7 @@ import java.util.List;
 public class JobApplication {
 
     @Id
-    private String id;
+    private ObjectId _id;
 
     @Size(min = 2, max = 60)
     private String firstName;
