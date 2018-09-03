@@ -12,6 +12,7 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class User {
