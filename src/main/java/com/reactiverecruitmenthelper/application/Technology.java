@@ -9,6 +9,7 @@ import javax.validation.constraints.Size;
 @ToString
 @EqualsAndHashCode
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class Technology {

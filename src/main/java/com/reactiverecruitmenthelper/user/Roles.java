@@ -1,12 +1,12 @@
 package com.reactiverecruitmenthelper.user;
 
+import com.reactiverecruitmenthelper.enums.Role;
 import lombok.*;
-
-import javax.management.relation.Role;
 
 @ToString
 @EqualsAndHashCode
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class Roles {
