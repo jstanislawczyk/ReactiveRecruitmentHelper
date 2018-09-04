@@ -24,7 +24,7 @@ public class UserController {
     @GetMapping
     @ResponseStatus(OK)
     public Flux<UserDto> getUserAllUsers() {
-        return userService.getAllUsers().flatMap(user -> dtoConverter.userMonoToDtoMono(Mono.just(user)));
+        return userService.getAllUsers().flatMap(user -> dtoConverter.userMonoToDtoMonoWithRoles(Mono.just(user)));
     }
 
     @PostMapping

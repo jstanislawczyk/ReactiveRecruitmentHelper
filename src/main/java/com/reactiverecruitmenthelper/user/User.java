@@ -1,8 +1,8 @@
 package com.reactiverecruitmenthelper.user;
 
+import com.reactiverecruitmenthelper.enums.Role;
 import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.Email;
@@ -33,6 +33,5 @@ class User {
     @Size(min = 5, max = 60)
     private char[] password;
 
-    @DBRef(lazy = true)
-    private List<Roles> roles;
+    private List<Role> roles;
 }
