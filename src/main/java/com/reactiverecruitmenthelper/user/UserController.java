@@ -8,32 +8,41 @@ import reactor.core.publisher.Mono;
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
+@RequestMapping("/users")
 @AllArgsConstructor
 public class UserController {
 
     private UserService userService;
+    private UserDtoConverter dtoConverter;
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/{id}")
     @ResponseStatus(OK)
     public Mono<UserDto> getUserById(@PathVariable String id) {
-        return userService.getUserById(id);
+        return dtoConverter.userMonoToDtoMonoWithRoles(userService.getUserById(id));
     }
 
-    @GetMapping("/users")
+    @GetMapping
     @ResponseStatus(OK)
     public Flux<UserDto> getUserAllUsers() {
-        return userService.getAllUsers();
+        return userService.getAllUsers().flatMap(user -> dtoConverter.userMonoToDtoMono(Mono.just(user)));
     }
 
-    @PostMapping("/users")
+    @PostMapping
     @ResponseStatus(CREATED)
-    public Mono<User> saveUser(@RequestBody UserDto userDto) {
-        return userService.saveUser(userDto);
+    public Mono<UserDto> saveUser(@RequestBody Mono<UserDto> userDto) {
+        Mono<User> user = userService.saveUser(dtoConverter.userFromDtoWithRoles(userDto));
+        return dtoConverter.userMonoToDtoMonoWithRoles(user);
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(NO_CONTENT)
     public Mono<Void> deleteUserById(@PathVariable String id) {
         return userService.deleteUserById(id);
+    }
+
+    @PutMapping
+    @ResponseStatus(OK)
+    public void updateUserById() {
+
     }
 }
