@@ -40,9 +40,10 @@ public class UserController {
         return userService.deleteUserById(id);
     }
 
-    @PutMapping
+    @PatchMapping("/{id}")
     @ResponseStatus(OK)
-    public void updateUserById() {
-
+    public Mono<UserDto> updateUserById(@PathVariable String id, @RequestBody Mono<UserDto> userDto) {
+        Mono<User> user = userService.updateUser(id, dtoConverter.userFromDtoWithRoles(userDto));
+        return dtoConverter.userMonoToDtoMonoWithRoles(user);
     }
 }

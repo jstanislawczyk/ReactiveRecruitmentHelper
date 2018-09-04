@@ -22,9 +22,9 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    Mono<User> saveUser(Mono<User> user) {
+    Mono<User> saveUser(Mono<User> userMono) {
         return userRepository
-                .insert(user)
+                .insert(userMono)
                 .flatMap(this::validEmailUniqueness)
                 .next();
     }
@@ -35,6 +35,13 @@ public class UserService {
                 .flatMap(user -> userRepository.deleteById(id));
     }
 
+    Mono<User> updateUser(String id, Mono<User> newUserMono) {
+        return userRepository.findById(id)
+                .transform(user -> throwErrorIfEmpty(user, id))
+                .transform(user -> updateEntity(newUserMono, user))
+                .flatMap(user -> userRepository.save(user));
+    }
+
     private Mono<User> validEmailUniqueness(User user) {
         return userRepository.findByEmail(user.getEmail())
                 .doOnError(throwable -> {throw new ConflictException("Email already exists");});
@@ -42,5 +49,17 @@ public class UserService {
 
     private <T> Mono<T> throwErrorIfEmpty(Mono<T> source, String id) {
         return source.switchIfEmpty(Mono.error(new NotFoundException("User not found [id = " + id + "]")));
+    }
+
+    private Mono<User> updateEntity(Mono<User> newUserMono, Mono<User> oldUserMono) {
+        return newUserMono.flatMap(updatedUser -> oldUserMono.flatMap(
+                oldUser -> {
+                    oldUser.setEmail(updatedUser.getEmail());
+                    oldUser.setFirstName(updatedUser.getFirstName());
+                    oldUser.setLastName(updatedUser.getLastName());
+                    oldUser.setPassword(updatedUser.getPassword());
+                    return Mono.just(oldUser);
+                }
+        ));
     }
 }

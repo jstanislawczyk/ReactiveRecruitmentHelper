@@ -5,28 +5,28 @@ import reactor.core.publisher.Mono;
 
 @Component
 public class UserDtoConverter {
-    Mono<UserDto> userMonoToDtoMonoWithRoles(Mono<User> user) {
-        return user.flatMap(value ->
+    Mono<UserDto> userMonoToDtoMonoWithRoles(Mono<User> userMono) {
+        return userMono.flatMap(user ->
                 Mono.just(UserDto.builder()
-                        .id(value.getId())
-                        .firstName(value.getFirstName())
-                        .lastName(value.getLastName())
-                        .email(value.getEmail())
-                        .password(value.getPassword())
-                        .roles(value.getRoles())
+                        .id(user.getId())
+                        .firstName(user.getFirstName())
+                        .lastName(user.getLastName())
+                        .email(user.getEmail())
+                        .password(user.getPassword())
+                        .roles(user.getRoles())
                         .build()
                 ));
     }
 
-    Mono<User> userFromDtoWithRoles(Mono<UserDto> userDto) {
-        return userDto.flatMap(value ->
+    Mono<User> userFromDtoWithRoles(Mono<UserDto> userDtoMono) {
+        return userDtoMono.flatMap(userDto ->
                 Mono.just(User.builder()
-                        .id(value.getId())
-                        .firstName(value.getFirstName())
-                        .lastName(value.getLastName())
-                        .email(value.getEmail())
-                        .password(value.getPassword())
-                        .roles(value.getRoles())
+                        .id(userDto.getId())
+                        .firstName(userDto.getFirstName())
+                        .lastName(userDto.getLastName())
+                        .email(userDto.getEmail())
+                        .password(userDto.getPassword())
+                        .roles(userDto.getRoles())
                         .build()
                 ));
     }
