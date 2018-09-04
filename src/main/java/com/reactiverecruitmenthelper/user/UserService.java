@@ -1,5 +1,6 @@
 package com.reactiverecruitmenthelper.user;
 
+import com.reactiverecruitmenthelper.exception.ConflictException;
 import com.reactiverecruitmenthelper.exception.NotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,7 +15,7 @@ public class UserService {
 
     Mono<User> getUserById(String id) {
         Mono<User> user = userRepository.findById(id);
-        return user.switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("User not found [id=" + id + "]"))));
+        return user.switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("User not found [id = " + id + "]"))));
     }
 
     Flux<User> getAllUsers() {
@@ -22,16 +23,24 @@ public class UserService {
     }
 
     Mono<User> saveUser(Mono<User> user) {
-        return userRepository.insert(user).next();
+        return userRepository
+                .insert(user)
+                .flatMap(this::validEmailUniqueness)
+                .next();
     }
 
     Mono<Void> deleteUserById(String id) {
         return userRepository.findById(id)
-                .transform(user -> errorIfEmpty(user, id))
+                .transform(user -> throwErrorIfEmpty(user, id))
                 .flatMap(user -> userRepository.deleteById(id));
     }
 
-    private <T> Mono<T> errorIfEmpty(Mono<T> source, String id) {
-        return source.switchIfEmpty(Mono.error(new NotFoundException("User not found [id=" + id + "]")));
+    private Mono<User> validEmailUniqueness(User user) {
+        return userRepository.findByEmail(user.getEmail())
+                .doOnError(throwable -> {throw new ConflictException("Email already exists");});
+    }
+
+    private <T> Mono<T> throwErrorIfEmpty(Mono<T> source, String id) {
+        return source.switchIfEmpty(Mono.error(new NotFoundException("User not found [id = " + id + "]")));
     }
 }
