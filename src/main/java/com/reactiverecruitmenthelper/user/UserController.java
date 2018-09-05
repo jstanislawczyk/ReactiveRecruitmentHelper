@@ -23,7 +23,7 @@ public class UserController {
 
     @GetMapping
     @ResponseStatus(OK)
-    public Flux<UserDto> getUserAllUsers() {
+    public Flux<UserDto> getAllUsers() {
         return userService.getAllUsers().flatMap(user -> dtoConverter.userMonoToDtoMonoWithRoles(Mono.just(user)));
     }
 
