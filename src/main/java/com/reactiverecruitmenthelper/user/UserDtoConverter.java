@@ -1,15 +1,12 @@
 package com.reactiverecruitmenthelper.user;
 
 import lombok.AllArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 @Component
 @AllArgsConstructor
 public class UserDtoConverter {
-
-    private PasswordEncoder passwordEncoder;
 
     Mono<UserDto> userMonoToDtoMonoWithRoles(Mono<User> userMono) {
         return userMono.flatMap(user ->
@@ -31,7 +28,7 @@ public class UserDtoConverter {
                         .firstName(userDto.getFirstName())
                         .lastName(userDto.getLastName())
                         .email(userDto.getEmail())
-                        .password(passwordEncoder.encode(userDto.getPassword()))
+                        .password(userDto.getPassword())
                         .roles(userDto.getRoles())
                         .build()
                 ));

@@ -25,12 +25,9 @@ public class UserService {
     }
 
     Mono<User> saveUser(Mono<User> userMono) {
-
-        return userRepository
-                .insert(userMono)
-                .flatMap(this::validEmailUniqueness)
+        return userMono
                 .flatMap(this::encodePassword)
-                .next();
+                .flatMap(user -> userRepository.insert(user));
     }
 
     Mono<Void> deleteUserById(String id) {
