@@ -19,7 +19,7 @@ import java.util.List;
 class User {
 
     @Id
-    private String id;
+    private String _id;
 
     @Size(min = 3, max = 60)
     private String firstName;

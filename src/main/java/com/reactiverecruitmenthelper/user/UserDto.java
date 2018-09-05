@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 class UserDto {
-    private String id;
+    private String _id;
     private String firstName;
     private String lastName;
     private String email;

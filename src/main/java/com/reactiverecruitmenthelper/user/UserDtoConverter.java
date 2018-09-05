@@ -8,7 +8,7 @@ public class UserDtoConverter {
     Mono<UserDto> userMonoToDtoMonoWithRoles(Mono<User> userMono) {
         return userMono.flatMap(user ->
                 Mono.just(UserDto.builder()
-                        .id(user.getId())
+                        ._id(user.get_id())
                         .firstName(user.getFirstName())
                         .lastName(user.getLastName())
                         .email(user.getEmail())
@@ -21,7 +21,7 @@ public class UserDtoConverter {
     Mono<User> userFromDtoWithRoles(Mono<UserDto> userDtoMono) {
         return userDtoMono.flatMap(userDto ->
                 Mono.just(User.builder()
-                        .id(userDto.getId())
+                        ._id(userDto.get_id())
                         .firstName(userDto.getFirstName())
                         .lastName(userDto.getLastName())
                         .email(userDto.getEmail())
