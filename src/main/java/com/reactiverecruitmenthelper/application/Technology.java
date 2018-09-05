@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class Technology {
+class Technology {
 
     @Size(min = 2, max = 30)
     private String name;
