@@ -15,7 +15,7 @@ public class UserService {
 
     Mono<User> getUserById(String id) {
         Mono<User> user = userRepository.findById(id);
-        return user.switchIfEmpty(Mono.defer(() -> Mono.error(new NotFoundException("User not found [_id = " + id + "]"))));
+        return user.transform(userMono -> throwErrorIfEmpty(userMono, id));
     }
 
     Flux<User> getAllUsers() {
