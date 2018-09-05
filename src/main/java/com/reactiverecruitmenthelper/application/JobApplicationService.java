@@ -25,10 +25,9 @@ public class JobApplicationService {
     }
 
     Mono<JobApplication> saveJobApplication(Mono<JobApplication> jobApplicationMono) {
-        return jobApplicationRepository
-                .insert(jobApplicationMono)
+        return jobApplicationMono
                 .flatMap(this::setTodayJobApplicationDate)
-                .next();
+                .flatMap(jobApplication -> jobApplicationRepository.save(jobApplication));
     }
 
     Mono<Void> deleteJobApplicationById(String id) {
