@@ -3,6 +3,7 @@ package com.reactiverecruitmenthelper.user;
 import com.reactiverecruitmenthelper.exception.ConflictException;
 import com.reactiverecruitmenthelper.exception.NotFoundException;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -12,6 +13,7 @@ import reactor.core.publisher.Mono;
 public class UserService {
 
     private UserRepository userRepository;
+    private PasswordEncoder passwordEncoder;
 
     Mono<User> getUserById(String id) {
         Mono<User> user = userRepository.findById(id);
@@ -23,9 +25,11 @@ public class UserService {
     }
 
     Mono<User> saveUser(Mono<User> userMono) {
+
         return userRepository
                 .insert(userMono)
                 .flatMap(this::validEmailUniqueness)
+                .flatMap(this::encodePassword)
                 .next();
     }
 
@@ -43,8 +47,13 @@ public class UserService {
     }
 
     private Mono<User> validEmailUniqueness(User user) {
-        return userRepository.findByEmail(user.getEmail())
+        return userRepository.getByEmail(user.getEmail())
                 .doOnError(throwable -> {throw new ConflictException("Email already exists");});
+    }
+
+    private Mono<User> encodePassword(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return Mono.just(user);
     }
 
     private Mono<User> throwErrorIfEmpty(Mono<User> source, String id) {
@@ -57,7 +66,6 @@ public class UserService {
                     oldUser.setEmail(updatedUser.getEmail());
                     oldUser.setFirstName(updatedUser.getFirstName());
                     oldUser.setLastName(updatedUser.getLastName());
-                    oldUser.setPassword(updatedUser.getPassword());
                     return Mono.just(oldUser);
                 }
         ));
