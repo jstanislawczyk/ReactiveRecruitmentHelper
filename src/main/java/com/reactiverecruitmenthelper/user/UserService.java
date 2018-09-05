@@ -47,7 +47,7 @@ public class UserService {
                 .doOnError(throwable -> {throw new ConflictException("Email already exists");});
     }
 
-    private <T> Mono<T> throwErrorIfEmpty(Mono<T> source, String id) {
+    private Mono<User> throwErrorIfEmpty(Mono<User> source, String id) {
         return source.switchIfEmpty(Mono.error(new NotFoundException("User not found [id = " + id + "]")));
     }
 
