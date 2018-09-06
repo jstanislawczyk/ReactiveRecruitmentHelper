@@ -26,8 +26,10 @@ public class UserService {
 
     Mono<User> saveUser(Mono<User> userMono) {
         return userMono
+                .flatMap(this::validEmailUniqueness)
                 .flatMap(this::encodePassword)
-                .flatMap(user -> userRepository.insert(user));
+                .flatMap(user -> userRepository.insert(user))
+                .doOnError(throwable -> {throw new ConflictException("Email already exists");});
     }
 
     Mono<Void> deleteUserById(String id) {
@@ -45,7 +47,7 @@ public class UserService {
 
     private Mono<User> validEmailUniqueness(User user) {
         return userRepository.getByEmail(user.getEmail())
-                .doOnError(throwable -> {throw new ConflictException("Email already exists");});
+                .switchIfEmpty(Mono.just(user));
     }
 
     private Mono<User> encodePassword(User user) {
