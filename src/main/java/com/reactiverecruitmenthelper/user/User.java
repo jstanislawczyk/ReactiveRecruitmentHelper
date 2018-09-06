@@ -42,7 +42,7 @@ public class User implements UserDetails {
     private boolean active = true;
 
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public Collection<Role> getAuthorities() {
         return roles;
     }
 
