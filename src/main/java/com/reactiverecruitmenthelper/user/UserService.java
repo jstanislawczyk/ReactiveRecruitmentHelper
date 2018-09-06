@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Optional;
+
 @Service
 @AllArgsConstructor
 public class UserService {
@@ -40,6 +42,7 @@ public class UserService {
 
     Mono<User> updateUser(String id, Mono<User> newUserMono) {
         return userRepository.findById(id)
+                .flatMap(this::validEmailUniqueness)
                 .transform(user -> throwErrorIfEmpty(user, id))
                 .transform(user -> updateEntity(newUserMono, user))
                 .flatMap(user -> userRepository.save(user));
@@ -62,9 +65,18 @@ public class UserService {
     private Mono<User> updateEntity(Mono<User> newUserMono, Mono<User> oldUserMono) {
         return newUserMono.flatMap(updatedUser -> oldUserMono.flatMap(
                 oldUser -> {
-                    oldUser.setEmail(updatedUser.getEmail());
-                    oldUser.setFirstName(updatedUser.getFirstName());
-                    oldUser.setLastName(updatedUser.getLastName());
+                    Optional.ofNullable(updatedUser.getFirstName())
+                            .ifPresent(oldUser::setFirstName);
+
+                    Optional.ofNullable(updatedUser.getLastName())
+                            .ifPresent(oldUser::setLastName);
+
+                    Optional.ofNullable(updatedUser.getPassword())
+                            .ifPresent(s -> oldUser.setPassword(passwordEncoder.encode(s)));
+
+                    Optional.ofNullable(updatedUser.getRoles())
+                            .ifPresent(oldUser::setRoles);
+
                     return Mono.just(oldUser);
                 }
         ));
