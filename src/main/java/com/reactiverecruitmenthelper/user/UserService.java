@@ -58,7 +58,7 @@ public class UserService {
     }
 
     private Mono<User> throwErrorIfEmpty(Mono<User> source, String id) {
-        return source.switchIfEmpty(Mono.error(new NotFoundException("User not found [_id = " + id + "]")));
+        return source.switchIfEmpty(Mono.error(new NotFoundException("User [_id = " + id + "] not found")));
     }
 
     private Mono<User> updateEntity(Mono<User> newUserMono, Mono<User> oldUserMono) {

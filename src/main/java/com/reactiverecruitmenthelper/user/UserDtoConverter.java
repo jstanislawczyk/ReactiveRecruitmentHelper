@@ -2,11 +2,16 @@ package com.reactiverecruitmenthelper.user;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Component
 @AllArgsConstructor
 public class UserDtoConverter {
+    Flux<UserDto> userFluxToDtoFluxWithRoles(Flux<User> userFlux) {
+        return userFlux.flatMap(user -> userMonoToDtoMonoWithRoles(Mono.just(user)));
+    }
+
     Mono<UserDto> userMonoToDtoMonoWithRoles(Mono<User> userMono) {
         return userMono.flatMap(user ->
                 Mono.just(UserDto.builder()
