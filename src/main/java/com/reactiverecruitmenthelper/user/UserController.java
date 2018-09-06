@@ -24,14 +24,14 @@ public class UserController {
     @GetMapping
     @ResponseStatus(OK)
     public Flux<UserDto> getAllUsers() {
-        return userService.getAllUsers().flatMap(user -> dtoConverter.userMonoToDtoMonoWithRoles(Mono.just(user)));
+        return dtoConverter.userFluxToDtoFluxWithRoles(userService.getAllUsers());
     }
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public Mono<UserDto> saveUser(@RequestBody Mono<UserDto> userDto) {
-        Mono<User> user = userService.saveUser(dtoConverter.userMonoFromDtoMonoWithRoles(userDto));
-        return dtoConverter.userMonoToDtoMonoWithRoles(user);
+    public Mono<User> saveUser(@RequestBody Mono<User> userDto) {
+        Mono<User> user = userService.saveUser(userDto);
+        return user;
     }
 
     @DeleteMapping("/{id}")
