@@ -1,6 +1,5 @@
 package com.reactiverecruitmenthelper.user;
 
-import com.reactiverecruitmenthelper.enums.Role;
 import lombok.*;
 
 import java.util.List;

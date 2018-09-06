@@ -1,6 +1,5 @@
 package com.reactiverecruitmenthelper.user;
 
-import com.reactiverecruitmenthelper.enums.Role;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -36,6 +35,7 @@ public class User implements UserDetails {
     @Size(min = 5, max = 100)
     private String password;
 
+    @Builder.Default()
     private List<Role> roles;
 
     @Builder.Default()
@@ -43,7 +43,7 @@ public class User implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        return roles;
     }
 
     @Override

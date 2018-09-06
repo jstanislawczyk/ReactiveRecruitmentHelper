@@ -1,5 +1,5 @@
 package com.reactiverecruitmenthelper.enums;
 
-public enum Role {
+public enum Authority {
     RECRUITER, ADMIN
 }

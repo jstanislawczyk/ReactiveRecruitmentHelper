@@ -7,7 +7,6 @@ import reactor.core.publisher.Mono;
 @Component
 @AllArgsConstructor
 public class UserDtoConverter {
-
     Mono<UserDto> userMonoToDtoMonoWithRoles(Mono<User> userMono) {
         return userMono.flatMap(user ->
                 Mono.just(UserDto.builder()
