@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,8 +20,6 @@ public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         return http.authorizeExchange()
-                .pathMatchers("/users").hasAuthority("ADMIN")
-                .pathMatchers("/job").hasAuthority("RECRUITER")
                 .anyExchange().permitAll()
                 .and().httpBasic()
                 .and().formLogin()
@@ -36,5 +35,9 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    public static String getCurrentLoggedInUserEmail() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }
