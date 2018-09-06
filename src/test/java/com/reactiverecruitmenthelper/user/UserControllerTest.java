@@ -11,6 +11,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserter;
 import org.springframework.web.reactive.function.BodyInserters;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -138,28 +139,73 @@ class UserControllerTest {
                 .body(BodyInserters.fromObject(usersDtos().get(3)))
                 .exchange()
                 .expectStatus().isCreated();
-
-        verify(userService, times(1)).saveUser(unsavedUserMono);
-        verifyNoMoreInteractions(userService);
     }
 
     @Test
-    void shouldNotSaveUserIfUserEmailNotUnique() {
-        Mono<User> unsavedUserMono = Mono.just(users().get(3));
-        Mono<UserDto> unsavedUserMonoDto = Mono.just(usersDtos().get(3));
+    void shouldUpdateUser() {
+        String id = "1";
 
-        when(userService.saveUser(unsavedUserMono)).thenThrow(new ConflictException("Email already exists"));
-        when(dtoConverter.userMonoFromDtoMonoWithRoles(unsavedUserMonoDto)).thenReturn(unsavedUserMono);
-        when(dtoConverter.userMonoToDtoMonoWithRoles(unsavedUserMono)).thenReturn(unsavedUserMonoDto);
+        when(dtoConverter.userMonoFromDtoMonoWithRoles(any()))
+                .thenReturn(Mono.just(updateUsers().get(0)));
 
-        webTestClient.post().uri("/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromObject(usersDtos().get(3)))
-                .exchange()
-                .expectStatus().is4xxClientError();
+        when(dtoConverter.userMonoToDtoMonoWithRoles(any()))
+                .thenReturn(Mono.just(updateUsersDto().get(1)));
 
-        verify(userService, times(1)).saveUser(unsavedUserMono);
-        verifyNoMoreInteractions(userService);
+        webTestClient.patch().uri("/users/{id}", id)
+            .contentType(MediaType.APPLICATION_JSON)
+            .body(BodyInserters.fromObject(updateUsers().get(0)))
+            .exchange()
+            .expectStatus().isOk();
+    }
+
+    private List<User> updateUsers() {
+        List<User> users = new ArrayList<>();
+        users.add(User.builder()
+                ._id("1")
+                .firstName("Jan")
+                .lastName("Kowalski")
+                .email("janKowalski1@mail.com")
+                .password("password")
+                .roles(new ArrayList<>())
+                .active(true)
+                .build());
+
+        users.add(User.builder()
+                ._id("1")
+                .firstName("Updated")
+                .lastName("Updated")
+                .email("updated@mail.com")
+                .password("password")
+                .roles(new ArrayList<>())
+                .active(true)
+                .build());
+
+        return users;
+    }
+
+    private List<UserDto> updateUsersDto() {
+        List<UserDto> usersDto = new ArrayList<>();
+        usersDto.add(UserDto.builder()
+                ._id("1")
+                .firstName("Jan")
+                .lastName("Kowalski")
+                .email("janKowalski1@mail.com")
+                .password("password")
+                .roles(new ArrayList<>())
+                .active(true)
+                .build());
+
+        usersDto.add(UserDto.builder()
+                ._id("1")
+                .firstName("Updated")
+                .lastName("Updated")
+                .email("updated@mail.com")
+                .password("password")
+                .roles(new ArrayList<>())
+                .active(true)
+                .build());
+
+        return usersDto;
     }
 
     private List<User> users() {

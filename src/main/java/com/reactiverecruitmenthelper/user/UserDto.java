@@ -17,4 +17,5 @@ class UserDto {
     private String email;
     private String password;
     private List<Role> roles;
+    private boolean active = true;
 }
