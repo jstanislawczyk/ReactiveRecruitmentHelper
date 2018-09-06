@@ -1,6 +1,5 @@
 package com.reactiverecruitmenthelper.user;
 
-import com.reactiverecruitmenthelper.enums.Role;
 import lombok.*;
 
 import java.util.List;
@@ -16,6 +15,6 @@ class UserDto {
     private String firstName;
     private String lastName;
     private String email;
-    private char[] password;
+    private String password;
     private List<Role> roles;
 }

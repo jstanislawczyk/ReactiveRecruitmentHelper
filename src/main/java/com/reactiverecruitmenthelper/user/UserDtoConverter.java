@@ -1,9 +1,11 @@
 package com.reactiverecruitmenthelper.user;
 
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 @Component
+@AllArgsConstructor
 public class UserDtoConverter {
     Mono<UserDto> userMonoToDtoMonoWithRoles(Mono<User> userMono) {
         return userMono.flatMap(user ->
@@ -18,7 +20,7 @@ public class UserDtoConverter {
                 ));
     }
 
-    Mono<User> userFromDtoWithRoles(Mono<UserDto> userDtoMono) {
+    Mono<User> userMonoFromDtoMonoWithRoles(Mono<UserDto> userDtoMono) {
         return userDtoMono.flatMap(userDto ->
                 Mono.just(User.builder()
                         ._id(userDto.get_id())

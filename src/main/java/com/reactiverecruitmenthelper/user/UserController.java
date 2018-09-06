@@ -30,7 +30,7 @@ public class UserController {
     @PostMapping
     @ResponseStatus(CREATED)
     public Mono<UserDto> saveUser(@RequestBody Mono<UserDto> userDto) {
-        Mono<User> user = userService.saveUser(dtoConverter.userFromDtoWithRoles(userDto));
+        Mono<User> user = userService.saveUser(dtoConverter.userMonoFromDtoMonoWithRoles(userDto));
         return dtoConverter.userMonoToDtoMonoWithRoles(user);
     }
 
@@ -43,7 +43,7 @@ public class UserController {
     @PatchMapping("/{id}")
     @ResponseStatus(OK)
     public Mono<UserDto> updateUserById(@PathVariable String id, @RequestBody Mono<UserDto> userDto) {
-        Mono<User> user = userService.updateUser(id, dtoConverter.userFromDtoWithRoles(userDto));
+        Mono<User> user = userService.updateUser(id, dtoConverter.userMonoFromDtoMonoWithRoles(userDto));
         return dtoConverter.userMonoToDtoMonoWithRoles(user);
     }
 }

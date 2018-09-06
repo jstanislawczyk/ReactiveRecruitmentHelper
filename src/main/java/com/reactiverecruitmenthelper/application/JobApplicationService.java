@@ -2,7 +2,6 @@ package com.reactiverecruitmenthelper.application;
 
 import com.reactiverecruitmenthelper.exception.NotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -25,10 +24,9 @@ public class JobApplicationService {
     }
 
     Mono<JobApplication> saveJobApplication(Mono<JobApplication> jobApplicationMono) {
-        return jobApplicationRepository
-                .insert(jobApplicationMono)
+        return jobApplicationMono
                 .flatMap(this::setTodayJobApplicationDate)
-                .next();
+                .flatMap(jobApplication -> jobApplicationRepository.save(jobApplication));
     }
 
     Mono<Void> deleteJobApplicationById(String id) {
