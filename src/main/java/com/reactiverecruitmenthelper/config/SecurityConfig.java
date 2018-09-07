@@ -20,6 +20,8 @@ public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         return http.authorizeExchange()
+                .pathMatchers("/users/**").hasAuthority("ADMIN")
+                .pathMatchers("/job/**").hasAuthority("RECRUITER")
                 .anyExchange().permitAll()
                 .and().httpBasic()
                 .and().formLogin()
@@ -35,9 +37,5 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
-    }
-
-    public static String getCurrentLoggedInUserEmail() {
-        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }
