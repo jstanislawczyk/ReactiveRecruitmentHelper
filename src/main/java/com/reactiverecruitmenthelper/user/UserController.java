@@ -29,9 +29,9 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(CREATED)
-    public Mono<User> saveUser(@RequestBody Mono<User> userDto) {
-        Mono<User> user = userService.saveUser(userDto);
-        return user;
+    public Mono<UserDto> saveUser(@RequestBody Mono<UserDto> userDto) {
+        Mono<User> userMono = userService.saveUser(dtoConverter.userMonoFromDtoMonoWithRoles(userDto));
+        return dtoConverter.userMonoToDtoMonoWithRoles(userMono);
     }
 
     @DeleteMapping("/{id}")
