@@ -8,7 +8,7 @@ import reactor.core.publisher.Mono;
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
-@RequestMapping("/job")
+@RequestMapping("/jobs")
 @AllArgsConstructor
 public class JobApplicationController {
 
