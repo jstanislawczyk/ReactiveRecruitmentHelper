@@ -27,41 +27,42 @@ public class JobLogger {
 
     @Before("getJobApplicationId(id)")
     public void logBeforeGetJobApplicationById(String id) {
-        log.info("ReactiveRecruitmentHelper | Admin attempts to get job application [id = {}]", id);
+        log.info("ReactiveRecruitmentHelper | Recruiter attempts to get job application [id = {}]", id);
     }
 
     @AfterReturning("getJobApplicationId(id)")
     public void logAfterGetJobApplicationById(String id) {
-        log.info("ReactiveRecruitmentHelper | Admin received job application [id = {}]", id);
+        log.info("ReactiveRecruitmentHelper | Recruiter received job application [id = {}]", id);
     }
 
     @Before("getAllJobApplications()")
     public void logBeforeGetAllJobApplications() {
-        log.info("ReactiveRecruitmentHelper | Admin attempts to get all job applications");
+        log.info("ReactiveRecruitmentHelper | Recruiter attempts to get all job applications");
     }
 
     @AfterReturning("getAllJobApplications()")
     public void logAfterGetAllJobApplications() {
-        log.info("ReactiveRecruitmentHelper | Admin received all job applications");
+        log.info("ReactiveRecruitmentHelper | Recruiter received all job applications");
     }
 
     @Before("deleteJobApplicationId(id)")
     public void logBeforeDeleteJobApplicationById(String id) {
-        log.info("ReactiveRecruitmentHelper | Admin attempts to delete job application [id = {}]", id);
+        log.info("ReactiveRecruitmentHelper | Recruiter attempts to delete job application [id = {}]", id);
     }
 
     @AfterReturning("deleteJobApplicationId(id)")
     public void logAfterDeleteJobApplicationById(String id) {
-        log.info("ReactiveRecruitmentHelper | Admin deleted job application [id = {}]", id);
+        log.info("ReactiveRecruitmentHelper | Recruiter deleted job application [id = {}]", id);
     }
 
     @Before("saveJobApplication()")
     public void logBeforeSaveJobApplication() {
-        log.info("ReactiveRecruitmentHelper | Admin attempts to save job application");
+        log.info("ReactiveRecruitmentHelper | Recruiter attempts to save job application");
     }
 
     @AfterReturning("saveJobApplication()")
     public void logAfterSaveJobApplication() {
-        log.info("ReactiveRecruitmentHelper | Admin saved job application");
+        log.info("ReactiveRecruitmentHelper | Recruiter saved job application");
     }
 }
+
