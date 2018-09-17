@@ -16,13 +16,21 @@ apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
 
 group = 'com'
-version = '0.0.1-SNAPSHOT'
+version = '0.2'
 sourceCompatibility = 10
 
 repositories {
     mavenCentral()
 }
 
+jar {
+    baseName = "reactive-recruitment-helper"
+    enabled=true
+    manifest {
+        attributes 'Main-Class': 'com.reactiverecruitmenthelper.ReactiveRecruitmentHelperApplication'
+    }
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
 
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-data-mongodb-reactive')
