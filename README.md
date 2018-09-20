@@ -16,4 +16,5 @@ Tool for organising IT recruitments.
 1. Pull this repository
 2. Install Docker (https://docs.docker.com/docker-for-windows/install/)
 3. Install GIT bash (needed for Windows) 
-4. Run start.sh script in bash
+4. Build jar (use bootJar). Jar should be found in build/libs
+5. Run start.sh script in bash
