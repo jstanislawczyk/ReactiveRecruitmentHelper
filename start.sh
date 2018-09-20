@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 clear
 printf "####################################\n"
-printf "STOP AND REMOVE CONTAINERS         #"
+printf "# STOP AND REMOVE CONTAINERS        #"
 printf "\n####################################\n\n"
 
 printf "Stop and remove spring app\n"
@@ -12,9 +12,9 @@ printf "\nstop and remove mongo database\n"
 docker stop reactive-mongo
 docker rm reactive-mongo
 
-printf "\n####################################\n"
-printf "REMOVE IMAGES                      #"
-printf "\n####################################\n\n"
+printf "\n#####################################\n"
+printf "# REMOVE IMAGES                    #"
+printf "\n#####################################\n\n"
 
 printf "remove spring app image\n"
 docker rmi $(docker images --format '{{.Repository}}' | grep 'reactive-recruitment-helper')
@@ -25,9 +25,9 @@ docker rmi $(docker images --format '{{.Repository}}' | grep 'reactive-mongo')
 printf "\nremove openjdk image\n"
 docker rmi $(docker images --format '{{.Repository}}' | grep 'openjdk')
 
-printf "\n####################################\n"
-printf "PULL IMAGES                        #"
-printf "\n####################################\n\n"
+printf "\n#####################################\n"
+printf "# PULL IMAGES                       #"
+printf "\n#####################################\n\n"
 
 printf "pull openjdk\n"
 docker pull openjdk:10
@@ -35,14 +35,14 @@ docker pull openjdk:10
 printf "\npull mongo"
 docker pull mongo
 
-printf "\n####################################\n"
-printf "BUILD FROM DOCKERFILE              #"
-printf "\n####################################\n\n"
+printf "\n#####################################\n"
+printf "# BUILD FROM DOCKERFILE             #"
+printf "\n#####################################\n\n"
 docker build -f Dockerfile -t reactive-recruitment-helper .
 
-printf "\n####################################\n"
-printf "RUN CONTAINERS                     #"
-printf "\n####################################\n\n"
+printf "\n#####################################\n"
+printf "# RUN CONTAINERS                    #"
+printf "\n#####################################\n\n"
 
 printf "run mongo\n"
 docker run --name reactive-mongo -p 27018:27017 -d mongo
