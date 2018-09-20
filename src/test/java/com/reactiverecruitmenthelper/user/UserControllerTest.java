@@ -1,7 +1,6 @@
 package com.reactiverecruitmenthelper.user;
 
 import com.reactiverecruitmenthelper.enums.Authority;
-import com.reactiverecruitmenthelper.exception.ConflictException;
 import com.reactiverecruitmenthelper.exception.NotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,7 +10,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.web.reactive.function.BodyInserter;
 import org.springframework.web.reactive.function.BodyInserters;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
