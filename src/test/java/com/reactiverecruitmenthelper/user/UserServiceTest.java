@@ -87,6 +87,30 @@ class UserServiceTest {
         verifyNoMoreInteractions(userRepository);
     }
 
+    @Test
+    void shouldDeleteUser() {
+        var id = "1";
+
+        when(userRepository.findById(id)).thenReturn(Mono.just(users().get(0)));
+        when(userRepository.deleteById(id)).thenReturn(Mono.empty());
+
+        assertNull(userService.deleteUserById(id).block());
+
+        userService.deleteUserById(id);
+
+        verify(userRepository, times(2)).deleteById(id);
+    }
+
+    @Test
+    void shouldNotDeleteIfUserDoesNotExist() {
+        var id = "1";
+
+        when(userRepository.findById(id)).thenReturn(Mono.empty());
+        assertThrows(NullPointerException.class, () -> userService.deleteUserById(id));
+
+        verify(userRepository, times(1)).deleteById(id);
+    }
+
     private List<User> updateUsers() {
         List<User> users = new ArrayList<>();
         users.add(User.builder()
