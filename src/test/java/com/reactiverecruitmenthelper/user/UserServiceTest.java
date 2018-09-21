@@ -33,7 +33,7 @@ class UserServiceTest {
     }
 
     @Test
-    void shouldGetTournamentById() {
+    void shouldGetUserById() {
         var id = "1";
 
         when(userRepository.findById(id)).thenReturn(Mono.just(users().get(0)));
@@ -68,8 +68,18 @@ class UserServiceTest {
     }
 
     @Test
-    void shouldGetAllTournaments() {
+    void shouldGetAllUsers() {
         when(userRepository.findAll()).thenReturn(Flux.fromIterable(users()));
+
+        assertEquals(userService.getAllUsers(), userRepository.findAll());
+
+        verify(userRepository, times(2)).findAll();
+        verifyNoMoreInteractions(userRepository);
+    }
+
+    @Test
+    void shouldGetEmptyMono() {
+        when(userRepository.findAll()).thenReturn(Flux.empty());
 
         assertEquals(userService.getAllUsers(), userRepository.findAll());
 
