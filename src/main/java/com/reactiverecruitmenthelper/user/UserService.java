@@ -37,7 +37,7 @@ public class UserService {
     Mono<Void> deleteUserById(String id) {
         return userRepository.findById(id)
                 .transform(user -> throwErrorIfEmpty(user, id))
-                .flatMap(user -> userRepository.deleteById(id));
+                .then(userRepository.deleteById(id));
     }
 
     Mono<User> updateUser(String id, Mono<User> newUserMono) {
