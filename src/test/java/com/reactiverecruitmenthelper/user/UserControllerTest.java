@@ -37,10 +37,10 @@ class UserControllerTest {
 
     @Test
     void shouldGetUserDtoById() {
-        String id = "1";
-        Mono<User> userMono = Mono.just(users().get(0));
-        Mono<UserDto> userDtoMono = Mono.just(usersDtos().get(0));
-        UserDto userDto = usersDtos().get(0);
+        var id = "1";
+        var userMono = Mono.just(users().get(0));
+        var userDtoMono = Mono.just(usersDtos().get(0));
+        var userDto = usersDtos().get(0);
 
         when(userService.getUserById(id)).thenReturn(userMono);
         when(dtoConverter.userMonoToDtoMonoWithRoles(userMono)).thenReturn(userDtoMono);
@@ -56,7 +56,7 @@ class UserControllerTest {
 
     @Test
     void shouldNotGetUserDtoById() {
-        String id = "1";
+        var id = "1";
         Mono<User> userMono = Mono.empty();
         Mono<UserDto> userDtoMono = Mono.empty();
 
@@ -74,8 +74,8 @@ class UserControllerTest {
 
     @Test
     void shouldGetAllUsers() {
-        Flux<User> usersFlux = Flux.fromIterable(users());
-        Flux<UserDto> userDtosFlux = Flux.fromIterable(usersDtos());
+        var usersFlux = Flux.fromIterable(users());
+        var userDtosFlux = Flux.fromIterable(usersDtos());
 
         when(userService.getAllUsers()).thenReturn(usersFlux);
         when(dtoConverter.userFluxToDtoFluxWithRoles(usersFlux)).thenReturn(userDtosFlux);
@@ -90,7 +90,7 @@ class UserControllerTest {
 
     @Test
     void shouldDeleteUserById() {
-        String id = "1";
+        var id = "1";
 
         webTestClient.delete().uri("/users/{id}", id)
                 .exchange()
@@ -103,7 +103,7 @@ class UserControllerTest {
 
     @Test
     void shouldNotDeleteUserByIdWhenUserDoesNotExists() {
-        String id = "1";
+        var id = "1";
 
         when(userService.deleteUserById(id))
                 .thenThrow(new NotFoundException("User [_id = " + id + "] not found"));
@@ -119,11 +119,11 @@ class UserControllerTest {
 
     @Test
     void shouldSaveUser() {
-        String id = "4";
-        Mono<User> unsavedUserMono = Mono.just(users().get(3));
-        Mono<User> savedUserMono = Mono.just(users().get(3));
-        Mono<UserDto> unsavedUserMonoDto = Mono.just(usersDtos().get(3));
-        Mono<UserDto> savedUserMonoDto = Mono.just(usersDtos().get(3));
+        var id = "4";
+        var unsavedUserMono = Mono.just(users().get(3));
+        var savedUserMono = Mono.just(users().get(3));
+        var unsavedUserMonoDto = Mono.just(usersDtos().get(3));
+        var savedUserMonoDto = Mono.just(usersDtos().get(3));
 
         savedUserMono.subscribe(user -> user.set_id(id));
         savedUserMonoDto.subscribe(userDto -> userDto.set_id(id));
@@ -141,7 +141,7 @@ class UserControllerTest {
 
     @Test
     void shouldUpdateUser() {
-        String id = "1";
+        var id = "1";
 
         when(dtoConverter.userMonoFromDtoMonoWithRoles(any()))
                 .thenReturn(Mono.just(updateUsers().get(0)));
