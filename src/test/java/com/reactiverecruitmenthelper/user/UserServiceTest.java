@@ -124,10 +124,15 @@ class UserServiceTest {
                 .build());
 
         users.add(User.builder()
+                .firstName("Updated")
+                .lastName("Updated")
+                .build());
+
+        users.add(User.builder()
                 ._id("1")
                 .firstName("Updated")
                 .lastName("Updated")
-                .email("updated@mail.com")
+                .email("janKowalski1@mail.com")
                 .password("password")
                 .roles(new ArrayList<>())
                 .active(true)
