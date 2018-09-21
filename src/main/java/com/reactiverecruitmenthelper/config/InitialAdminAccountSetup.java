@@ -1,6 +1,7 @@
 package com.reactiverecruitmenthelper.config;
 
 import com.reactiverecruitmenthelper.enums.Authority;
+import com.reactiverecruitmenthelper.exception.ConflictException;
 import com.reactiverecruitmenthelper.user.Role;
 import com.reactiverecruitmenthelper.user.User;
 import com.reactiverecruitmenthelper.user.UserRepository;
@@ -23,7 +24,7 @@ public class InitialAdminAccountSetup {
     @EventListener(ApplicationReadyEvent.class)
     public void createFirstAdminAccount() {
         Mono<User> admin = Mono.just(createAdmin());
-        userRepository.insert(admin).subscribe();
+        userRepository.insert(admin).doOnError(throwable -> new ConflictException("Test")).subscribe();
     }
 
     private User createAdmin() {
