@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 clear
 printf "####################################\n"
-printf "# STOP AND REMOVE CONTAINERS        #"
+printf "# STOP AND REMOVE CONTAINERS       #"
 printf "\n####################################\n\n"
 
 printf "Stop and remove spring app\n"
@@ -13,7 +13,7 @@ docker stop reactive-mongo
 docker rm reactive-mongo
 
 printf "\n#####################################\n"
-printf "# REMOVE IMAGES                    #"
+printf "# REMOVE IMAGES                     #"
 printf "\n#####################################\n\n"
 
 printf "remove spring app image\n"
