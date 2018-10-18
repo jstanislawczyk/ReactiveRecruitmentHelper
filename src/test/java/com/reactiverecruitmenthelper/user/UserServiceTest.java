@@ -78,7 +78,7 @@ class UserServiceTest {
     }
 
     @Test
-    void shouldGetEmptyMono() {
+    void shouldGetEmptyFlux() {
         when(userRepository.findAll()).thenReturn(Flux.empty());
 
         assertEquals(userService.getAllUsers(), userRepository.findAll());
