@@ -25,12 +25,12 @@ public class JobLogger {
     public void saveJobApplication() {}
 
 
-    @Before("getJobApplicationId(id)")
+    @Before(value = "getJobApplicationId(id)", argNames = "id")
     public void logBeforeGetJobApplicationById(String id) {
         log.info("ReactiveRecruitmentHelper | Recruiter attempts to get job application [id = {}]", id);
     }
 
-    @AfterReturning("getJobApplicationId(id)")
+    @AfterReturning(value = "getJobApplicationId(id)", argNames = "id")
     public void logAfterGetJobApplicationById(String id) {
         log.info("ReactiveRecruitmentHelper | Recruiter received job application [id = {}]", id);
     }
@@ -45,12 +45,12 @@ public class JobLogger {
         log.info("ReactiveRecruitmentHelper | Recruiter received all job applications");
     }
 
-    @Before("deleteJobApplicationId(id)")
+    @Before(value = "deleteJobApplicationId(id)", argNames = "id")
     public void logBeforeDeleteJobApplicationById(String id) {
         log.info("ReactiveRecruitmentHelper | Recruiter attempts to delete job application [id = {}]", id);
     }
 
-    @AfterReturning("deleteJobApplicationId(id)")
+    @AfterReturning(value = "deleteJobApplicationId(id)", argNames = "id")
     public void logAfterDeleteJobApplicationById(String id) {
         log.info("ReactiveRecruitmentHelper | Recruiter deleted job application [id = {}]", id);
     }

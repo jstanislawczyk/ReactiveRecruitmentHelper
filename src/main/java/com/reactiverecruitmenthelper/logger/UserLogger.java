@@ -28,7 +28,7 @@ public class UserLogger {
     public void updateUserById() {}
 
 
-    @Before("getUserById(id)")
+    @Before(value = "getUserById(id)", argNames = "id")
     public void logBeforeGetUserById(String id) {
         log.info("ReactiveRecruitmentHelper | Admin attempts to get user [id = {}]", id);
     }
@@ -48,12 +48,12 @@ public class UserLogger {
         log.info("ReactiveRecruitmentHelper | Admin received all users");
     }
 
-    @Before("deleteUserById(id)")
+    @Before(value = "deleteUserById(id)", argNames = "id")
     public void logBeforeDeleteUserById(String id) {
         log.info("ReactiveRecruitmentHelper | Admin attempts to delete user [id = {}]", id);
     }
 
-    @AfterReturning("deleteUserById(id)")
+    @AfterReturning(value = "deleteUserById(id)", argNames = "id")
     public void logAfterDeleteUserById(String id) {
         log.info("ReactiveRecruitmentHelper | Admin deleted user [id = {}]", id);
     }
