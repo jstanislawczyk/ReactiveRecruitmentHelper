@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @SuppressWarnings("UnassignedFluxMonoInstance")
@@ -81,8 +82,13 @@ class UserControllerTest {
         when(dtoConverter.userFluxToDtoFluxWithRoles(usersFlux)).thenReturn(userDtosFlux);
 
         webTestClient.get().uri("/users")
+                .accept(MediaType.APPLICATION_JSON_UTF8)
                 .exchange()
-                .expectStatus().isOk();
+                .expectStatus().isOk()
+                .expectBodyList(User.class)
+                .hasSize(4)
+                .consumeWith(users ->
+                    assertThat(users.getResponseBody()).isEqualTo(usersFlux.collectList().block()));
 
         verify(userService, times(1)).getAllUsers();
         verifyNoMoreInteractions(userService);
@@ -132,11 +138,13 @@ class UserControllerTest {
         when(dtoConverter.userMonoFromDtoMonoWithRoles(unsavedUserMonoDto)).thenReturn(unsavedUserMono);
         when(dtoConverter.userMonoToDtoMonoWithRoles(savedUserMono)).thenReturn(savedUserMonoDto);
 
+
         webTestClient.post().uri("/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(BodyInserters.fromObject(usersDtos().get(3)))
+                .body(Mono.just(usersDtos().get(3)), UserDto.class)
                 .exchange()
-                .expectStatus().isCreated();
+                .expectStatus().isCreated()
+                .expectBody().isEmpty();
     }
 
     @Test
@@ -264,6 +272,7 @@ class UserControllerTest {
                 .email("janKowalski1@mail.com")
                 .password("password")
                 .roles(new ArrayList<>())
+                .active(true)
                 .build());
 
         userDtos.add(UserDto.builder()
@@ -273,6 +282,7 @@ class UserControllerTest {
                 .email("janKowalski1@mail.com")
                 .password("password")
                 .roles(Collections.singletonList(new Role(Authority.ADMIN)))
+                .active(true)
                 .build());
 
         userDtos.add(UserDto.builder()
@@ -282,6 +292,7 @@ class UserControllerTest {
                 .email("janKowalski1@mail.com")
                 .password("password")
                 .roles(Collections.singletonList(new Role(Authority.RECRUITER)))
+                .active(true)
                 .build());
 
         userDtos.add(UserDto.builder()
@@ -293,6 +304,7 @@ class UserControllerTest {
                         new Role(Authority.ADMIN),
                         new Role(Authority.RECRUITER)
                 ))
+                .active(true)
                 .build());
 
         return userDtos;
