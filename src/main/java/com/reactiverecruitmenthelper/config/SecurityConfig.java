@@ -26,7 +26,6 @@ public class SecurityConfig {
                 .pathMatchers("/jobs/**").hasAuthority("RECRUITER")
                 .anyExchange().permitAll()
                 .and().httpBasic()
-                .and().formLogin()
                 .and().csrf().disable()
                 .build();
     }
