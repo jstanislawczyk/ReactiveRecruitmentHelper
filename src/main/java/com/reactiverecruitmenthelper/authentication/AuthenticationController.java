@@ -16,7 +16,7 @@ public class AuthenticationController {
     private AuthenticationService authenticationService;
 
     @PostMapping("/login")
-    public Mono<Boolean> authenticateUser(@RequestBody Mono<User> user) {
-        return authenticationService.authenticateUser(user);
+    public Mono<Boolean> authenticateUser(@RequestBody Mono<User> userMono) {
+        return authenticationService.authenticateUser(userMono);
     }
 }
