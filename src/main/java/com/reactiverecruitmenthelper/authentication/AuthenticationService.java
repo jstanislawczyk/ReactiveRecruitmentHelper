@@ -15,15 +15,20 @@ public class AuthenticationService {
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
 
-    Mono<Boolean> authenticateUser(Mono<User> userMono) {
+    Mono<User> authenticateUser(Mono<User> userMono) {
         return userMono
-                .flatMap(this::isUserDataCorrect)
-                .switchIfEmpty(Mono.just(false));
+                .flatMap(this::isUserDataCorrect);
     }
 
-    private Mono<Boolean> isUserDataCorrect(User user) {
+    private Mono<User> isUserDataCorrect(User user) {
         return userRepository.getByEmail(user.getEmail())
-                .map(databaseUser -> isPasswordCorrect(user, databaseUser));
+                .flatMap(databaseUser -> {
+                    if(isPasswordCorrect(user, databaseUser)) {
+                        return Mono.just(databaseUser);
+                    } else {
+                        return Mono.empty();
+                    }
+                });
     }
 
     private boolean isPasswordCorrect(User user, User databaseUser) {
