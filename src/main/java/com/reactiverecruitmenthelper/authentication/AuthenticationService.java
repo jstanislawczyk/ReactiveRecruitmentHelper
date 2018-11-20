@@ -1,5 +1,7 @@
 package com.reactiverecruitmenthelper.authentication;
 
+import com.reactiverecruitmenthelper.exception.ConflictException;
+import com.reactiverecruitmenthelper.exception.NotFoundException;
 import com.reactiverecruitmenthelper.user.User;
 import com.reactiverecruitmenthelper.user.UserRepository;
 import lombok.AllArgsConstructor;
@@ -27,7 +29,8 @@ public class AuthenticationService {
                     } else {
                         return Mono.empty();
                     }
-                });
+                })
+                .switchIfEmpty(Mono.error(new ConflictException("Authentication failed")));
     }
 
     private boolean isPasswordCorrect(User user, User databaseUser) {
