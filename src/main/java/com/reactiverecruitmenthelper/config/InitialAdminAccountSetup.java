@@ -24,7 +24,10 @@ public class InitialAdminAccountSetup {
     @EventListener(ApplicationReadyEvent.class)
     public void createFirstAdminAccount() {
         Mono<User> admin = Mono.just(createAdmin());
-        userRepository.insert(admin).doOnError(throwable -> new ConflictException("Test")).subscribe();
+        userRepository
+                .insert(admin)
+                .doOnError(throwable -> new ConflictException(""))
+                .subscribe();
     }
 
     private User createAdmin() {
