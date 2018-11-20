@@ -21,6 +21,7 @@ public class UserDtoConverter {
                         .email(user.getEmail())
                         .password(user.getPassword())
                         .roles(user.getRoles())
+                        .active(user.isActive())
                         .build()
                 ));
     }
@@ -34,6 +35,7 @@ public class UserDtoConverter {
                         .email(userDto.getEmail())
                         .password(userDto.getPassword())
                         .roles(userDto.getRoles())
+                        .active(userDto.isActive())
                         .build()
                 ));
     }
