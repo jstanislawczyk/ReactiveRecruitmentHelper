@@ -1,7 +1,6 @@
 package com.reactiverecruitmenthelper.authentication;
 
 import com.reactiverecruitmenthelper.exception.ConflictException;
-import com.reactiverecruitmenthelper.exception.NotFoundException;
 import com.reactiverecruitmenthelper.user.User;
 import com.reactiverecruitmenthelper.user.UserRepository;
 import lombok.AllArgsConstructor;
