@@ -12,7 +12,7 @@ public class UserDtoConverter {
         return userFlux.flatMap(user -> userMonoToDtoMonoWithRoles(Mono.just(user)));
     }
 
-    Mono<UserDto> userMonoToDtoMonoWithRoles(Mono<User> userMono) {
+    public Mono<UserDto> userMonoToDtoMonoWithRoles(Mono<User> userMono) {
         return userMono.flatMap(user ->
                 Mono.just(UserDto.builder()
                         ._id(user.get_id())
@@ -25,7 +25,7 @@ public class UserDtoConverter {
                 ));
     }
 
-    Mono<User> userMonoFromDtoMonoWithRoles(Mono<UserDto> userDtoMono) {
+    public Mono<User> userMonoFromDtoMonoWithRoles(Mono<UserDto> userDtoMono) {
         return userDtoMono.flatMap(userDto ->
                 Mono.just(User.builder()
                         ._id(userDto.get_id())

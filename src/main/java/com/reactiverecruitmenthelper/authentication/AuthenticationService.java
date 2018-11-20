@@ -11,7 +11,6 @@ import reactor.core.publisher.Mono;
 @AllArgsConstructor
 public class AuthenticationService {
 
-
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
 

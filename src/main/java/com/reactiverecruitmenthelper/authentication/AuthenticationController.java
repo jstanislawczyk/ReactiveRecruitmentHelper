@@ -1,6 +1,8 @@
 package com.reactiverecruitmenthelper.authentication;
 
 import com.reactiverecruitmenthelper.user.User;
+import com.reactiverecruitmenthelper.user.UserDto;
+import com.reactiverecruitmenthelper.user.UserDtoConverter;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,9 +16,11 @@ import reactor.core.publisher.Mono;
 public class AuthenticationController {
 
     private AuthenticationService authenticationService;
+    private UserDtoConverter userDtoConverter;
 
     @PostMapping("/login")
-    public Mono<User> authenticateUser(@RequestBody Mono<User> userMono) {
-        return authenticationService.authenticateUser(userMono);
+    public Mono<UserDto> authenticateUser(@RequestBody Mono<UserDto> userMonoDto) {
+        Mono<User> userMono = userDtoConverter.userMonoFromDtoMonoWithRoles(userMonoDto);
+        return userDtoConverter.userMonoToDtoMonoWithRoles(authenticationService.authenticateUser(userMono));
     }
 }

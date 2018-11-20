@@ -10,7 +10,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-class UserDto {
+public class UserDto {
     private String _id;
     private String firstName;
     private String lastName;
