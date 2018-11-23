@@ -23,7 +23,7 @@ public class AuthenticationService {
     private Mono<User> isUserDataCorrect(User user) {
         return userRepository.getByEmail(user.getEmail())
                 .flatMap(databaseUser -> {
-                    if(isPasswordCorrect(user, databaseUser)) {
+                    if(isPasswordCorrect(user, databaseUser) && isAccountActive(databaseUser)) {
                         return Mono.just(databaseUser);
                     } else {
                         return Mono.empty();
@@ -34,5 +34,9 @@ public class AuthenticationService {
 
     private boolean isPasswordCorrect(User user, User databaseUser) {
         return passwordEncoder.matches(user.getPassword(), databaseUser.getPassword());
+    }
+
+    private boolean isAccountActive(User user) {
+        return user.isActive();
     }
 }
