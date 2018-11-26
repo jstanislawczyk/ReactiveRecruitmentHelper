@@ -21,8 +21,10 @@ public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
         return http.authorizeExchange()
+                .pathMatchers(HttpMethod.OPTIONS, "/users/**").permitAll()
                 .pathMatchers("/users/**").hasAuthority("ADMIN")
                 .pathMatchers(HttpMethod.POST, "/jobs/**").permitAll()
+                .pathMatchers(HttpMethod.OPTIONS, "/jobs/**").permitAll()
                 .pathMatchers("/jobs/**").hasAuthority("RECRUITER")
                 .anyExchange().permitAll()
                 .and().httpBasic()
