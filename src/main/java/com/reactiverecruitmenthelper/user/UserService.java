@@ -31,7 +31,9 @@ public class UserService {
                 .flatMap(this::validEmailUniqueness)
                 .flatMap(this::encodePassword)
                 .flatMap(user -> userRepository.insert(user))
-                .doOnError(throwable -> {throw new ConflictException("Email already exists");});
+                .doOnError(throwable -> {
+                    throw new ConflictException("Email already exists");
+                });
     }
 
     Mono<Void> deleteUserById(String id) {
