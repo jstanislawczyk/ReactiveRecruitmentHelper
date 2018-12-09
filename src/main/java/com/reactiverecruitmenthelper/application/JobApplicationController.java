@@ -24,13 +24,17 @@ public class JobApplicationController {
     @GetMapping
     @ResponseStatus(OK)
     public Flux<JobApplicationDto> getAllJobApplications() {
-        return jobApplicationService.getAllJobApplications().flatMap(jobApplication -> jobApplicationDtoConverter.jobApplicationMonoToDtoMono(Mono.just(jobApplication)));
+        return jobApplicationService
+                .getAllJobApplications()
+                .flatMap(jobApplication -> jobApplicationDtoConverter.jobApplicationMonoToDtoMono(Mono.just(jobApplication)));
     }
 
     @PostMapping
     @ResponseStatus(CREATED)
     public Mono<JobApplicationDto> saveJobApplication(@RequestBody Mono<JobApplicationDto> jobApplicationMonoDto) {
-        Mono<JobApplication> jobApplicationMono = jobApplicationService.saveJobApplication(jobApplicationDtoConverter.jobApplicationMonoFromDtoMono(jobApplicationMonoDto));
+        Mono<JobApplication> jobApplicationMono =
+                jobApplicationService.saveJobApplication(jobApplicationDtoConverter.jobApplicationMonoFromDtoMono(jobApplicationMonoDto));
+
         return jobApplicationDtoConverter.jobApplicationMonoToDtoMono(jobApplicationMono);
     }
 
