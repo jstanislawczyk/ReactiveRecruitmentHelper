@@ -24,7 +24,7 @@ public class UserLogger {
     @Pointcut("execution(* com.reactiverecruitmenthelper.user.UserController.saveUser(*))")
     public void saveUser() {}
 
-    @Pointcut("execution(* com.reactiverecruitmenthelper.user.UserController.updateUserById(*))")
+    @Pointcut("execution(* com.reactiverecruitmenthelper.user.UserController.updateUserById(*, *))")
     public void updateUserById() {}
 
 
@@ -33,7 +33,7 @@ public class UserLogger {
         log.info("ReactiveRecruitmentHelper | Admin attempts to get user [id = {}]", id);
     }
 
-    @AfterReturning("getUserById(id)")
+    @AfterReturning(value = "getUserById(id)", argNames = "id")
     public void logAfterGetUserById(String id) {
         log.info("ReactiveRecruitmentHelper | Admin received user [id = {}]", id);
     }
