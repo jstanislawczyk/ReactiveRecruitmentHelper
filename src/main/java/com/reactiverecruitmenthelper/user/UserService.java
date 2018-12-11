@@ -72,8 +72,11 @@ public class UserService {
                     Optional.ofNullable(updatedUser.getLastName())
                             .ifPresent(oldUser::setLastName);
 
+                    Optional.of(updatedUser.isActive())
+                            .ifPresent(oldUser::setActive);
+
                     Optional.ofNullable(updatedUser.getPassword())
-                            .ifPresent(s -> oldUser.setPassword(passwordEncoder.encode(s)));
+                            .ifPresent(password -> oldUser.setPassword(passwordEncoder.encode(password)));
 
                     Optional.ofNullable(updatedUser.getRoles())
                             .ifPresent(oldUser::setRoles);
