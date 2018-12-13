@@ -1,10 +1,12 @@
 package com.reactiverecruitmenthelper.user;
 
+import com.reactiverecruitmenthelper.helper.Page;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import static com.reactiverecruitmenthelper.helper.Page.DEFAULT_PAGE_SIZE;
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
@@ -23,8 +25,10 @@ public class UserController {
 
     @GetMapping
     @ResponseStatus(OK)
-    public Flux<UserDto> getAllUsers() {
-        return dtoConverter.userFluxToDtoFluxWithRoles(userService.getAllUsers());
+    public Mono<Page<UserDto>> getAllUsers(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = DEFAULT_PAGE_SIZE) int size) {
+        return userService.getAllUsers(page, size);
     }
 
     @PostMapping

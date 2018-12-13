@@ -39,4 +39,16 @@ public class UserDtoConverter {
                         .build()
                 ));
     }
+
+    UserDto userToDtoWithRoles(User user) {
+        return UserDto.builder()
+                        ._id(user.get_id())
+                        .firstName(user.getFirstName())
+                        .lastName(user.getLastName())
+                        .email(user.getEmail())
+                        .password(user.getPassword())
+                        .roles(user.getRoles())
+                        .active(user.isActive())
+                        .build();
+    }
 }
