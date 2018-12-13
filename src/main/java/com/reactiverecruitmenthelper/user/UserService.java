@@ -2,13 +2,14 @@ package com.reactiverecruitmenthelper.user;
 
 import com.reactiverecruitmenthelper.exception.ConflictException;
 import com.reactiverecruitmenthelper.exception.NotFoundException;
+import com.reactiverecruitmenthelper.helper.Page;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -16,14 +17,29 @@ public class UserService {
 
     private UserRepository userRepository;
     private PasswordEncoder passwordEncoder;
+    private UserDtoConverter userDtoConverter;
 
     Mono<User> getUserById(String id) {
         Mono<User> user = userRepository.findById(id);
         return user.transform(userMono -> throwErrorIfEmpty(userMono, id));
     }
 
-    Flux<User> getAllUsers() {
-        return userRepository.findAll();
+    Mono<Page<UserDto>> getAllUsers(int page, int size) {
+        return userRepository.findAll()
+                .collectList()
+                .map(usersList ->
+                        new Page<>(
+                                usersList
+                                    .stream()
+                                    .skip(page * size)
+                                    .limit(size)
+                                    .map(userDtoConverter::userToDtoWithRoles)
+                                    .collect(Collectors.toList()),
+                                page,
+                                size,
+                                usersList.size()
+                        )
+                );
     }
 
     Mono<User> saveUser(Mono<User> userMono) {
