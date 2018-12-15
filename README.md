@@ -18,3 +18,6 @@ Tool for organising IT recruitments.
 3. Install GIT bash (needed for Windows) 
 4. Build jar (use bootJar). Jar should be found in build/libs
 5. Run start.sh script in bash
+
+## Angular 7 client
+Example client available [here](https://github.com/xenonso/ReactiveRecruitmentHelper-Angular-Client) 
