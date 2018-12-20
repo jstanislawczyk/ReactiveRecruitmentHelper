@@ -62,7 +62,7 @@ public class UserService {
         return userRepository.findById(id)
                 .transform(user -> throwErrorIfEmpty(user, id))
                 .transform(user -> updateEntity(newUserMono, user))
-                .flatMap(user -> userRepository.save(user));
+                .flatMap(userRepository::save);
     }
 
     private Mono<User> validEmailUniqueness(User user) {
