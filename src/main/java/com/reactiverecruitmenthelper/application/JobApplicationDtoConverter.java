@@ -36,4 +36,20 @@ public class JobApplicationDtoConverter {
                         .build()
                 ));
     }
+
+    JobApplicationDto jobApplicationToDto(JobApplication jobApplication) {
+        return JobApplicationDto
+                .builder()
+                ._id(jobApplication.get_id())
+                .firstName(jobApplication.getFirstName())
+                .lastName(jobApplication.getLastName())
+                .jobPosition(jobApplication.getJobPosition())
+                .experienceYearsInJobPosition(jobApplication.getExperienceYearsInJobPosition())
+                .candidateMessage(jobApplication.getCandidateMessage())
+                .cvFilePath(jobApplication.getCvFilePath())
+                .applicationDate(jobApplication.getApplicationDate())
+                .technologies(jobApplication.getTechnologies())
+                .build();
+
+    }
 }
