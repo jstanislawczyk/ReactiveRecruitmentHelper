@@ -23,12 +23,18 @@ public class UserController {
         return dtoConverter.userMonoToDtoMonoWithRoles(userService.getUserById(id));
     }
 
+    @GetMapping("/all")
+    @ResponseStatus(OK)
+    public Flux<UserDto> getAllUsers() {
+        return dtoConverter.userFluxToDtoFluxWithRoles(userService.getAllUsers());
+    }
+
     @GetMapping
     @ResponseStatus(OK)
-    public Mono<Page<UserDto>> getAllUsers(
+    public Mono<Page<UserDto>> getUsersPage(
             @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = DEFAULT_PAGE_SIZE) int size) {
-        return userService.getAllUsers(page, size);
+        return userService.getUsersPage(page, size);
     }
 
     @PostMapping

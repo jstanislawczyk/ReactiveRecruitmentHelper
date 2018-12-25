@@ -6,6 +6,7 @@ import com.reactiverecruitmenthelper.helper.Page;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Optional;
@@ -24,7 +25,11 @@ public class UserService {
         return user.transform(userMono -> throwErrorIfEmpty(userMono, id));
     }
 
-    Mono<Page<UserDto>> getAllUsers(int page, int size) {
+    Flux<User> getAllUsers() {
+        return userRepository.findAll();
+    }
+
+    Mono<Page<UserDto>> getUsersPage(int page, int size) {
         return userRepository.findAll()
                 .collectList()
                 .map(usersList ->
