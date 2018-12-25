@@ -1,10 +1,12 @@
 package com.reactiverecruitmenthelper.application;
 
+import com.reactiverecruitmenthelper.helper.Page;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import static com.reactiverecruitmenthelper.helper.Page.DEFAULT_PAGE_SIZE;
 import static org.springframework.http.HttpStatus.*;
 
 @RestController
@@ -21,12 +23,20 @@ public class JobApplicationController {
         return jobApplicationDtoConverter.jobApplicationMonoToDtoMono(jobApplicationService.getJobApplicationById(id));
     }
 
-    @GetMapping
+    @GetMapping("/all")
     @ResponseStatus(OK)
     public Flux<JobApplicationDto> getAllJobApplications() {
         return jobApplicationService
                 .getAllJobApplications()
                 .flatMap(jobApplication -> jobApplicationDtoConverter.jobApplicationMonoToDtoMono(Mono.just(jobApplication)));
+    }
+
+    @GetMapping
+    @ResponseStatus(OK)
+    public Mono<Page<JobApplicationDto>> getUsersPage(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = DEFAULT_PAGE_SIZE) int size) {
+        return jobApplicationService.getJobApplicationsPage(page, size);
     }
 
     @PostMapping
