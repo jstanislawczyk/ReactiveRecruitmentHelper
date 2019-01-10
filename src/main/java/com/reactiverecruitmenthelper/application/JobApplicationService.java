@@ -16,6 +16,7 @@ public class JobApplicationService {
 
     private JobApplicationRepository jobApplicationRepository;
     private JobApplicationDtoConverter jobApplicationDtoConverter;
+    private JobApplicationDynamicQueryRepository jobApplicationDynamicQueryRepository;
 
     Mono<JobApplication> getJobApplicationById(String id) {
         Mono<JobApplication> jobApplicationMono = jobApplicationRepository.findById(id);
@@ -26,8 +27,10 @@ public class JobApplicationService {
         return jobApplicationRepository.findAll();
     }
 
-    Mono<Page<JobApplicationDto>> getJobApplicationsPage(int page, int size) {
-        return jobApplicationRepository.findAll()
+    Mono<Page<JobApplicationDto>> getJobApplicationsPage(String jobPosition, String experienceYears, int page, int size) {
+        JobApplication jobApplication = createJobApplication(jobPosition, experienceYears);
+
+        return jobApplicationDynamicQueryRepository.findJobApplicationsByParams(jobApplication)
                 .collectList()
                 .map(usersList ->
                         new Page<>(
@@ -63,5 +66,12 @@ public class JobApplicationService {
 
     private Mono<JobApplication> throwErrorIfEmpty(Mono<JobApplication> source, String id) {
         return source.switchIfEmpty(Mono.error(new NotFoundException("Job application not found [_id = " + id + "]")));
+    }
+
+    private JobApplication createJobApplication(String jobPosition, String experienceYears) {
+        return JobApplication.builder()
+                    .jobPosition(jobPosition)
+                    .experienceYearsInJobPosition(Integer.parseInt(experienceYears))
+                .build();
     }
 }

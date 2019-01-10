@@ -34,9 +34,12 @@ public class JobApplicationController {
     @GetMapping
     @ResponseStatus(OK)
     public Mono<Page<JobApplicationDto>> getUsersPage(
+            @RequestParam(name = "jobPosition", required = false) String jobPosition,
+            @RequestParam(name = "experienceYears", required = false, defaultValue = "-1") String experienceYears,
             @RequestParam(value = "page", defaultValue = "0") int page,
-            @RequestParam(value = "size", defaultValue = DEFAULT_PAGE_SIZE) int size) {
-        return jobApplicationService.getJobApplicationsPage(page, size);
+            @RequestParam(value = "size", defaultValue = DEFAULT_PAGE_SIZE) int size
+    ) {
+        return jobApplicationService.getJobApplicationsPage(jobPosition, experienceYears, page, size);
     }
 
     @PostMapping
